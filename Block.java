@@ -7,7 +7,7 @@ public class Block {
     private String data; // our data in box
     private long timeStamp; // milliseconds
     private int nonce;
-    public static int difficulty = 1;
+    
 
     // now construct Blocks constructor
     public Block(String data, String previousHash) {
@@ -33,7 +33,7 @@ public class Block {
 
 
         while (!hash.substring(0, difficulty).equals(target)) {
-            nonce++;
+            nonce ++;
             hash = calculateHash();
         }
         System.out.println("Block Mined!!: "+ hash);
