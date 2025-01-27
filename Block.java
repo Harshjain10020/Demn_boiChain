@@ -19,9 +19,14 @@ public class Block {
     }
     //way to generate a digital fingerprint using SHA256 algorithm 
     public String calculateHash() {
-        String calculatedhash = StringUtil.applySha256(previousHash + Long.toString(timeStamp) + data);
-        return calculatedhash;
-    }
+		String calculatedhash = StringUtil.applySha256( 
+				previousHash +
+				Long.toString(timeStamp) +
+				Integer.toString(nonce) + 
+				data 
+				);
+		return calculatedhash;
+	}
 
     /*
      * Now lets work with Miners , our proof of work ; to show that this much work
