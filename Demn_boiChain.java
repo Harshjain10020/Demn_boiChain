@@ -1,74 +1,73 @@
 import java.util.ArrayList;
 import com.google.gson.GsonBuilder;
 
+/**
+ * The Demn_boiChain class represents a simple blockchain implementation.
+ * It includes methods for adding blocks, mining them, and validating the chain.
+ */
 public class Demn_boiChain {
-	public static int difficulty = 1;
-	public static ArrayList<Block> blockchain = new ArrayList<Block>();
+    
+    // Difficulty level for mining
+    public static int difficulty = 1;
+    
+    // Blockchain represented as an ArrayList of Blocks
+    public static ArrayList<Block> blockchain = new ArrayList<Block>();
 
-	public static void main(String[] args) {
-		// // to show hash , data of each block
-		// Block genesisBlock = new Block("ola i'm the 1st block", "0");
-		// System.out.println("Hash for block 1 : " + genesisBlock.hash);
+    public static void main(String[] args) {
+        // Add blocks to the blockchain and mine them
+        blockchain.add(new Block("Hi, I'm the first block", "0"));
+        System.out.println("Trying to Mine block 1... ");
+        blockchain.get(0).MineBlocks(difficulty);
 
-		// Block secondBlock = new Block("Yo im the second(1st loser)
-		// block",genesisBlock.hash);
-		// System.out.println("Hash for block 2 : " + secondBlock.hash);
+        blockchain.add(new Block("Yo, I'm the second block", blockchain.get(blockchain.size() - 1).hash));
+        System.out.println("Trying to Mine block 2... ");
+        blockchain.get(1).MineBlocks(difficulty);
 
-		// Block thirdBlock = new Block("Hey im the third(2nd winner)
-		// block",secondBlock.hash);
-		// System.out.println("Hash for block 3 : " + thirdBlock.hash);
+        blockchain.add(new Block("Hey, I'm the third block", blockchain.get(blockchain.size() - 1).hash));
+        System.out.println("Trying to Mine block 3... ");
+        blockchain.get(2).MineBlocks(difficulty);
 
-		// add our blocks to the blockchain ArrayList:
-		blockchain.add(new Block("Hi im the first block", "0"));
-		System.out.println("Trying to Mine block 1... ");
-		blockchain.get(0).MineBlocks(difficulty);
+        // Validate the blockchain
+        System.out.println("\nBlockchain is Valid: " + isChainValid());
 
-		blockchain.add(new Block("Yo im the second block", blockchain.get(blockchain.size() - 1).hash));
-		System.out.println("Trying to Mine block 2... ");
-		blockchain.get(1).MineBlocks(difficulty);
+        // Convert blockchain to JSON format and print it
+        String blockchainJson = new GsonBuilder().setPrettyPrinting().create().toJson(blockchain);
+        System.out.println("\nThe blockchain: ");
+        System.out.println(blockchainJson);
+    }
 
-		blockchain.add(new Block("Hey im the third block", blockchain.get(blockchain.size() - 1).hash));
-		System.out.println("Trying to Mine block 3... ");
-		blockchain.get(2).MineBlocks(difficulty);
+    /**
+     * Validates the blockchain by checking hashes and proof of work.
+     * @return true if the blockchain is valid, false otherwise.
+     */
+    public static Boolean isChainValid() {
+        Block curBlock;
+        Block preBlock;
+        String hashTarget = new String(new char[difficulty]).replace('\0', '0');
 
-		System.out.println("\nBlockchain is Valid: " + isChainValid());
+        // Traverse through the blockchain
+        for (int i = 1; i < blockchain.size(); i++) {
+            curBlock = blockchain.get(i);
+            preBlock = blockchain.get(i - 1);
 
-		String blockchainJson = new GsonBuilder().setPrettyPrinting().create().toJson(blockchain);
-		System.out.println("\nThe block chain: ");
-		System.out.println(blockchainJson);
+            // Validate the current block's hash
+            if (!curBlock.hash.equals(curBlock.calculateHash())) {
+                System.out.println("Current hashes not equal");
+                return false;
+            }
 
-	}
-
-	// now to validate blocks
-	public static Boolean isChainValid() {
-		Block curBlock;
-		Block preBlock;
-		String hashtarget = new String(new char[difficulty]).replace('\0', '0');
-
-		// tranverse thru blocks
-		for (int i = 1; i < blockchain.size(); i++) {
-			curBlock = blockchain.get(i);
-			preBlock = blockchain.get(i - 1);
-
-			// compare hashes
-
-			if (!curBlock.hash.equals(curBlock.calculateHash())) {
-				System.out.println("current Hashes not equal");
-				return false;
-			}
-
-			// for previous hash
-			if (!preBlock.hash.equals(preBlock.calculateHash())) {
-				System.out.println("previous Hashes not equal");
-				return false;
-			}
-			// check if hash is solved
-			if (!curBlock.hash.substring(0, difficulty).equals(hashtarget)) {
-				System.out.println("This block hasn't been mined");
-				return false;
-			}
-
-		}
-		return true;
-	}
+            // Validate the previous block's hash reference
+            if (!preBlock.hash.equals(preBlock.calculateHash())) {
+                System.out.println("Previous hashes not equal");
+                return false;
+            }
+            
+            // Check if the block has been mined correctly
+            if (!curBlock.hash.substring(0, difficulty).equals(hashTarget)) {
+                System.out.println("This block hasn't been mined");
+                return false;
+            }
+        }
+        return true;
+    }
 }
