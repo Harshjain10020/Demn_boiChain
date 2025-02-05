@@ -6,7 +6,7 @@ import java.security.Signature;
 import java.util.Base64;
 
 /**
- * The StringUtil class provides utility methods for hashing strings using the SHA-256 algorithm.
+ * The StringUtil class provides utility methods for hashing, signing, and verifying data.
  */
 public class StringUtil {
     
@@ -34,36 +34,52 @@ public class StringUtil {
         }
     }  
     
-    //Applies ECDSA Signature and returns the result ( as bytes ).
-		public static byte[] applyECDSASig(PrivateKey privateKey, String input) {
-		Signature dsa;
-		byte[] output = new byte[0];
-		try {
-			dsa = Signature.getInstance("ECDSA", "BC");
-			dsa.initSign(privateKey);
-			byte[] strByte = input.getBytes();
-			dsa.update(strByte);
-			byte[] realSig = dsa.sign();
-			output = realSig;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-		return output;
-	}
-	
-	//Verifies a String signature 
-	public static boolean verifyECDSASig(PublicKey publicKey, String data, byte[] signature) {
-		try {
-			Signature ecdsaVerify = Signature.getInstance("ECDSA", "BC");
-			ecdsaVerify.initVerify(publicKey);
-			ecdsaVerify.update(data.getBytes());
-			return ecdsaVerify.verify(signature);
-		}catch(Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
+    /**
+     * Applies ECDSA Signature and returns the result as a byte array.
+     * @param privateKey The private key used to sign the input.
+     * @param input The input string to be signed.
+     * @return The ECDSA signature as a byte array.
+     */
+    public static byte[] applyECDSASig(PrivateKey privateKey, String input) {
+        Signature dsa;
+        byte[] output = new byte[0];
+        try {
+            dsa = Signature.getInstance("ECDSA", "BC");
+            dsa.initSign(privateKey);
+            byte[] strByte = input.getBytes();
+            dsa.update(strByte);
+            byte[] realSig = dsa.sign();
+            output = realSig;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return output;
+    }
+    
+    /**
+     * Verifies an ECDSA signature.
+     * @param publicKey The public key used for verification.
+     * @param data The original data that was signed.
+     * @param signature The signature to be verified.
+     * @return True if the signature is valid, false otherwise.
+     */
+    public static boolean verifyECDSASig(PublicKey publicKey, String data, byte[] signature) {
+        try {
+            Signature ecdsaVerify = Signature.getInstance("ECDSA", "BC");
+            ecdsaVerify.initVerify(publicKey);
+            ecdsaVerify.update(data.getBytes());
+            return ecdsaVerify.verify(signature);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	public static String getStringFromKey(Key key) {
-		return Base64.getEncoder().encodeToString(key.getEncoded());
-	}
+    /**
+     * Converts a cryptographic key to a Base64-encoded string.
+     * @param key The cryptographic key to convert.
+     * @return The Base64-encoded string representation of the key.
+     */
+    public static String getStringFromKey(Key key) {
+        return Base64.getEncoder().encodeToString(key.getEncoded());
+    }
 }
