@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import com.google.gson.GsonBuilder;
-import java.util.Base64;
-import java.security.Security;
+
 
 /**
  * The Demn_boiChain class represents a simple blockchain implementation.
