@@ -1,4 +1,4 @@
-# Blockchain Ledger in Java
+# Demn_boiChain : Blockchain Ledger in Java
 
 ## Introduction
 The aim of this tutorial series is to help you understand blockchain technology by developing one from scratch using Java. This is a proof-of-concept implementation designed for educational purposes and is not intended for production use.
