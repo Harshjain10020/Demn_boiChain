@@ -25,13 +25,13 @@ java -version
 If Java is not installed, download it from [Oracle JDK](https://www.oracle.com/java/technologies/javase-downloads.html).
 
 ### 2. Set Up Your Project
-Create a new Java project and a class called `NoobChain`.
+Create a new Java project and a class called `Demn_boiChain`.
 
 ```java
 import java.util.ArrayList;
 import com.google.gson.GsonBuilder;
 
-public class NoobChain {
+public class Demn_boiChain {
     public static ArrayList<Block> blockchain = new ArrayList<>();
     public static int difficulty = 5;
 
@@ -111,8 +111,8 @@ public class StringUtil {
 ## Running the Blockchain
 Compile and run the Java files to see blockchain mining in action:
 ```sh
-javac NoobChain.java Block.java StringUtil.java
-java NoobChain
+javac Demn_boiChain.java Block.java StringUtil.java
+java Demn_boiChain
 ```
 
 ## Checking Blockchain Integrity
